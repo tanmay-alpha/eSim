@@ -37,9 +37,7 @@ index 2af79ef..1fe73e0 100644
  
  
 diff --git a/Ubuntu/install-eSim.sh b/Ubuntu/install-eSim.sh
-old mode 100755
-new mode 100644
-index 23072dc..845dceb
+index 23072dc..845dceb 100755
 --- a/Ubuntu/install-eSim.sh
 +++ b/Ubuntu/install-eSim.sh
 @@ -22,8 +22,8 @@

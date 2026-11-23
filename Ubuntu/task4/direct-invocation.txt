@@ -1,0 +1,4 @@
+755 Ubuntu/install-eSim.sh
+Detected Ubuntu Version: 25.04
+Running script: /tmp/Ubuntu/install-eSim-scripts/install-eSim-25.04.sh --uninstall
+Are you sure? It will remove eSim completely including KiCad, Makerchip, NGHDL and SKY130 PDK along with their models and libraries (y/n):direct_exit=0
