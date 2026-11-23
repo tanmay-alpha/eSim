@@ -1,0 +1,41 @@
+Ubuntu 25.04 KiCad stage: before and after
+
+Scope: actual Bash functions sourced from Ubuntu/install-eSim-scripts/install-eSim-25.04.sh, not a simulation or a full dispatcher/GUI test. Two disposable linux/amd64 ubuntu:25.04 containers (image ID prefix 27771fb7b40a), root, signed Ubuntu indexes using /usr/share/keyrings/ubuntu-archive-keyring.gpg. http://old-releases.ubuntu.com/ubuntu returned 404 for plucky Release; http://archive.ubuntu.com/ubuntu supplied signed plucky, plucky-updates, plucky-security and plucky-backports. Mirror setup was container-only, not an installer change. Both containers removed afterwards.
+
+Before editing: old function from a31aab34ae31537d81ae31cf051cbccade8d44f5, minimal container with sudo, unzip, xz-utils and lsb-release, without software-properties-common. Ran inside bash -ec with set -E and the installer's ERR trap:
+  source <(sed '/^### Checking if file/,$d' /tmp/before.sh)
+  set -E; trap error_exit ERR; installKicad
+  Installing KiCad...........................
+  Ubuntu 25.04 detected.
+  Adding KiCad PPA to local apt repository: kicad/kicad-8.0-releases
+  sudo: add-apt-repository: command not found
+  Error! Kindly resolve above error(s) and try again.
+  Aborting Installation...
+Exit 1. This is a missing helper, not an unsatisfiable pinned binary.
+
+Control: a separate container with software-properties-common installed ran the same old function. It added the Launchpad PPA and succeeded: dpkg-query -W showed kicad 8.0.8+dfsg-1 and kicad-libraries 8.0.9~ubuntu25.04.1. Invoking 'installKicad; echo RETURNED_TO_CALLER' again printed 'KiCad 8.0 is already installed.' and exited the entire shell with status 0 without printing RETURNED_TO_CALLER.
+
+After: reused the minimal container, where /etc/apt/sources.list.d contained only ubuntu.sources. apt-cache policy kicad reported Installed: (none), Candidate: 8.0.8+dfsg-1, from plucky/universe. Downloaded .debs were cached in /var/cache/apt/archives, not installed using dpkg. A preliminary invocation encountered an archive lock held by a simultaneous download-only process; stopped the download before the final run. No unauthenticated flags, PPA, preinstalled KiCad, or fake commands. Ran the final worktree function as above, then dpkg-query -W and kicad-cli version:
+  0 upgraded, 201 newly installed, 0 to remove and 9 not upgraded.
+  KiCad installation completed successfully!
+  kicad             8.0.8+dfsg-1
+  kicad-footprints  8.0.8-1
+  kicad-libraries   8.0.8+dfsg-1
+  kicad-symbols     8.0.8-1
+  kicad-templates   8.0.8-1
+  8.0.8
+First install returned 0. Reinvoked installKicad in the same shell:
+  KiCad 8.0.8+dfsg-1 is already installed.
+  0 upgraded, 0 newly installed, 0 to remove and 9 not upgraded.
+  KiCad installation completed successfully!
+  rerun_returned_to_caller
+The last line is the caller's echo immediately after installKicad, proving control returned. An incompatible preinstalled version was not exercised.
+
+Next stages: used library/kicadLibrary.tar.xz and nghdl.zip extracted directly from official eSim-2.5.zip, SHA-256 b9860ae26f026930bae589520761f4a57b85d593a2e2cd1ac83d5e5db2f281ed (verified inside the container). Ran copyKicadLibrary then installNghdl from the release root with USER=root. Selected output:
+  .config/kicad/6.0 does not exist
+  symbol table copied in the directory
+  library_exit=0
+  -rw-r--r-- 1 root root 37320 Nov 23 17:23 /root/.config/kicad/6.0/sym-lib-table
+  Detected Ubuntu Version: 
+  Unsupported Ubuntu version: 25.04 ()
+The release NGHDL dispatcher exited 1 after extraction. SKY130/desktop creation did not run; copying a table into the script's 6.0 directory does not verify KiCad 8 GUI discovery. No GUI, user project, unrelated installer stages or host packages were exercised.
