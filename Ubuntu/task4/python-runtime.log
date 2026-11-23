@@ -1,0 +1,22 @@
+python3	3.13.3-1
+python3-matplotlib	3.8.3-7build1
+python3-psutil	5.9.8-2build3
+python3-pyqt5	5.15.11+dfsg-2
+python3-virtualenv	20.29.1+ds-1
+Before: virtualenv /tmp/esim-env
+Traceback (most recent call last):
+  File "/tmp/check-runtime.py", line 5, in <module>
+    import matplotlib
+ModuleNotFoundError: No module named 'matplotlib'
+baseline_exit=1
+After: virtualenv --system-site-packages /tmp/esim-env
+created virtual environment CPython3.13.3.final.0-64 in 81ms
+  creator CPython3Posix(dest=/tmp/esim-env, clear=False, no_vcs_ignore=False, global=True)
+  seeder FromAppData(download=False, pip=bundle, via=copy, app_data_dir=/root/.local/share/virtualenv)
+    added seed packages: pip==25.0
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+Python 3.13.3; Qt 5.15.15; matplotlib 3.8.3; psutil 5.9.8
+/usr/lib/python3/dist-packages/PyQt5/QtCore.abi3.so
+/usr/lib/python3/dist-packages/matplotlib/__init__.py
+/usr/lib/python3/dist-packages/psutil/__init__.py
+repaired_exit=0

@@ -170,14 +170,15 @@ function installDependency
     set -e      # Re-enable exit on error
     trap error_exit ERR
     
-    echo "Instaling virtualenv......................."
-    sudo apt install python3-virtualenv
+    echo "Installing virtualenv......................."
+    sudo apt-get install -y python3-virtualenv
    
-    echo "Creating virtual environment to isolate packages "
-    virtualenv $config_dir/env
+    # The launcher uses this interpreter; expose the distro GUI bindings
+    # installed below while keeping pip-installed tools local to eSim.
+    virtualenv --system-site-packages "$config_dir/env"
     
     echo "Starting the virtual env..................."
-    source $config_dir/env/bin/activate
+    source "$config_dir/env/bin/activate"
 
     echo "Upgrading Pip.............................."
     pip install --upgrade pip
@@ -216,12 +217,6 @@ function installDependency
    
     echo "Installing Hdlparse......................"
     pip3 install hdlparse
-
-    echo "Installing matplotlib................"
-    pip3 install matplotlib
-
-    echo "Installing PyQt5............."
-    pip3 install PyQt5  
 }
 
 
