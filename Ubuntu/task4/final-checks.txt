@@ -1,0 +1,17 @@
+Independent regression checks (disposable Docker container, linux/amd64)
+Image: ubuntu:25.04@sha256:27771fb7b40a58237c98e8d3e6b9ecdd9289cec69a857fccfb85ff36294dac20
+Ubuntu 25.04 Plucky. Original = a77d6b904c7bab275d819cf4d8cbb594802fe16d. Pre-patch = a31aab34ae31537d81ae31cf051cbccade8d44f5.
+Final = patched install-eSim-scripts/install-eSim-25.04.sh (SHA-256 1eaad24fa47e125f6ac2a93593f5f61ee2499e7b7a2c152778bfe8fd95f0187a). The last change to the already-installed path was separately checked with bash -n and ShellCheck 0.10.0 on the exact final bytes; the diagnostic counts below did not change.
+All paths below relative to Ubuntu/. These are component checks, not a full installation or GUI test.
+
+Dispatcher: bash task4/check-dispatch.sh -> 0. Declining removal reached the 25.04 backend, and EOF at its install prompt propagated exit 1 as expected.
+
+Runtime: python3 -m venv /tmp/esim-isolated; its bin/python task4/check-runtime.py -> 1, ModuleNotFoundError: matplotlib (expected negative control).
+python3 -m venv --system-site-packages /tmp/esim-env; /tmp/esim-env/bin/python task4/check-runtime.py -> 0. Python 3.13.3, Qt 5.15.15, matplotlib 3.8.3, psutil 5.9.8. QtCore, matplotlib and psutil resolved under /usr/lib/python3/dist-packages. This checks visibility of the apt-installed packages, not environment creation by the installer.
+
+KiCad: signed archive.ubuntu.com Plucky indexes and the signed kicad/kicad-8.0-releases PPA. bash task4/kicad-check.sh -> 0. The unpinned simulation exited 100: libgit2-1.8 is not installable (expected negative control). Actual pinned installation exited 0. dpkg reported kicad 8.0.8+dfsg-1, all four library packages 8.0.9~ubuntu25.04.1, and libgit2-1.9:amd64 1.9.0+ds-1ubuntu1 installed. kicad-cli version: 8.0.8.
+
+Syntax: bash -n -> 0 individually for install-eSim.sh, task4/check-dispatch.sh, task4/kicad-check.sh and all three revisions of install-eSim-scripts/install-eSim-25.04.sh.
+
+ShellCheck 0.10.0: install-eSim.sh, task4/check-dispatch.sh and task4/kicad-check.sh each returned 1 with the default invocation: only SC1091 for /etc/os-release. shellcheck -x -> 0 for each on Plucky.
+Backend (default ShellCheck, no exclusions): exit 1 on all three revisions. Pre-existing diagnostics by code (original / pre-patch / final): SC1091 1/1/1, SC2006 1/1/1, SC2034 1/1/1, SC2086 38/36/36, SC2129 4/4/4, SC2162 7/7/6, SC2166 4/4/4, SC2181 3/3/3. Comparing diagnostic sequences without file/line locations showed two SC2086 notes removed before this patch and one SC2162 note removed by this patch. No new diagnostics; the backend is not ShellCheck-clean.

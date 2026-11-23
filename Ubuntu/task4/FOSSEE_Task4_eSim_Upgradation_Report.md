@@ -2,6 +2,8 @@
 
 Tanmay Mangal | FOSSEE Winter Internship 2026 | Screening Task 4: eSim Upgradation
 
+**Result:** The repaired Ubuntu 25.04 installer dispatches the official 2.5 payload, exposes distro Python GUI dependencies to eSim, and installs KiCad 8 from signed Plucky packages without a PPA. The release's separate NGHDL dispatcher does not support 25.04. This is a verified partial installation, not a working-GUI claim.
+
 ## Objective and source identity
 
 Determine what prevents the eSim 2.5 Linux installer from progressing on Ubuntu 25.04, fix a reproducible failure, and separate installer defects from environment limitations. The [official download page](https://esim.fossee.in/downloads) lists 22.04, 23.04 and 24.04 for the 2.5 ZIP; 25.04 is the screening target, not a documented 2.5 platform.
@@ -78,9 +80,9 @@ Baseline probe exit 1; repaired probe exit 0. Python 3.13.3 loaded Qt 5.15.15, M
 
 An independent invocation of `bash install-nghdl.sh --install` inside the unmodified release's bundled nghdl.zip exited 1 with `Unsupported Ubuntu version: 25.04 ()`. The archive contains backend scripts for 22.04, 23.04 and 24.04 only. This blocks that component before an LLVM build. No LLVM compile failure was observed or fixed. See `nghdl.log`.
 
-## KiCad: a control that should not be changed
+## KiCad package selection: why the version pin matters
 
-With the signed KiCad 8 PPA enabled, the existing installer pin selected `8.0.8+dfsg-1`. A real APT installation fetched 206 MB, installed 202 packages and exited 0; `kicad-cli version` returned `8.0.8`. Removing only the pin selected PPA version `8.0.9-0~ubuntu25.04.1`, which requires unavailable `libgit2-1.8`; APT exited 100. The shipped pin protects this path. No KiCad fix is claimed. Exact sources, commands and installed versions: `kicad-results.log`; reproducer: `kicad-check.sh`.
+Initial PPA control (`a31aab34ae`): with the signed KiCad 8 PPA enabled, the existing installer pin selected `8.0.8+dfsg-1`. A real APT installation fetched 206 MB, installed 202 packages and exited 0; `kicad-cli version` returned `8.0.8`. Removing only the pin selected PPA version `8.0.9-0~ubuntu25.04.1`, which requires unavailable `libgit2-1.8`; APT exited 100. This control supports keeping the version pin; it does not establish that adding the PPA is necessary. Exact sources, commands and installed versions: `kicad-results.log`; reproducer: `kicad-check.sh`.
 
 ## Application boundary
 
@@ -92,8 +94,30 @@ In the dependency-only container, importing the release's actual `src/frontEnd/A
 
 `release-baseline.txt` identifies both inputs with checksums. `installer.diff` contains the implementation changes; `dispatcher.log`, `environment.log`, `mirrors.log`, `python-runtime.log`, `application-import.log`, `kicad-results.log` and `nghdl.log` record the respective experiments. Regression scripts are intended for disposable guests only, particularly the KiCad check, which installs real system packages.
 
-## Final release-overlay run and conclusion
+## Initial complete release-overlay attempt (a31aab34ae)
 
 As user `ubuntu` (UID 1000), in a newly extracted release and a fresh home on the same container (APT packages from the earlier run retained), we applied the two files above and ran `printf 'n\ny\n' | timeout 120 ./install-eSim.sh --install`. The launcher selected 25.04, completed the Python dependency phase including hdlparse 1.0.7, then exited 1 at KiCad PPA setup: `sudo: add-apt-repository: command not found`. This is a missing utility in the minimal container, distinct from KiCad's package solver. The run was not timed out. `release-overlay.txt` is its full output.
 
 From that release's `src/frontEnd` directory the actual installer-created interpreter then ran `import Application; print(Application.Application.__name__)` with `QT_QPA_PLATFORM=offscreen`: output `Application`, exit 0 (`final-application-import.log`). The same interpreter passed `check-runtime.py`. The repaired launcher and Python dependency path work together with the official payload. Full installation, GUI interaction and circuit simulation are not verified.
+
+## Executable mode and patch provenance
+
+`direct-invocation.txt` records a Plucky run using files exported from Git blobs with their tracked modes, rather than permissions inherited from a Windows bind mount. `Ubuntu/install-eSim.sh` had mode 0755; `printf 'n\n' | ./Ubuntu/install-eSim.sh --uninstall` invoked the backend through the shebang and returned 0 without uninstalling. Both the upstream and fork Git trees track the launcher as 100755. The patch in `installer.diff` is a commit-to-commit `git diff`, not a diff against a Windows worktree.
+
+## Scope of the library-copy result
+
+The release's `library/kicadLibrary.tar.xz` includes a `template/sym-lib-table` with `${KICAD6_SYMBOL_DIR}` references. The Plucky backend copies it to `~/.config/kicad/6.0/`, despite installing KiCad 8. A successful file copy does not establish that KiCad 8 discovers or loads the libraries. The existing copy function also changes ownership of the system symbol directory recursively; these experiments were restricted to disposable containers.
+
+## KiCad setup repair and measured outcome (67c1019667)
+
+The previous revision always attempted `add-apt-repository` in a minimal guest. Installing `software-properties-common` made that command available, but added a third-party repository when signed Plucky `universe` already supplied the exact pinned binary and all four library packages. The revised 25.04 backend installs these packages from the configured APT indexes without adding or modifying sources. `--no-remove` prevents APT from resolving conflicts by removing installed packages. The installer preserves a compatible installed binary, checks its libraries, and returns to its caller; the old code exited the entire installation on a repeat run. An incompatible installed major is refused rather than purged. That refusal was reviewed, not exercised with another major.
+
+In the fresh-install stage test, `apt-get` installed 201 packages with zero removals, and `kicad-cli version` returned `8.0.8`. A second run installed zero packages and returned to the caller. The real release library-copy function returned 0; the bundled NGHDL dispatcher then returned 1, before LLVM compilation. Exact package versions, control experiments and outputs: `kicad-archive.txt`.
+
+Independent regressions (`final-checks.txt`): dispatcher, Python runtime smoke test, pinned KiCad installation and Bash syntax passed. `shellcheck -x` passed for the dispatcher and both Bash check scripts. The Plucky backend still has pre-existing ShellCheck findings (exit 1); the patch introduced no new diagnostic category or count. Earlier Ubuntu backends remain unchanged and untested. No GUI or circuit simulation was run.
+
+## Final integrated run: first remaining stop
+
+Inside a disposable Plucky guest, the unprivileged `ubuntu` user ran `./install-eSim.sh --install` in the verified 2.5 release with the two packaging files overlaid (standard input: `n` then `y`). All APT sources were signed Ubuntu sources. Downloads were prefetched, not installed with dpkg. The baseline and final runs had separate homes and release copies; the final run retained OS dependencies installed by the baseline, but no preinstalled KiCad. A preliminary concurrent attempt hit a dpkg lock and was discarded; the comparison below was run serially.
+
+With the `a31aab34ae` backend the complete invocation reached KiCad and exited 1 at `add-apt-repository`. With `67c1019667` it installed KiCad, copied the symbols, extracted NGHDL and exited 1 at `Unsupported Ubuntu version: 25.04 ()`. `dpkg-query` confirmed `install ok installed`; `kicad-cli version` printed `8.0.8`. The installer-created Python passed `check-runtime.py` and imported `Application` successfully. `final-overlay.txt` contains the exit status, selected output and file evidence. No NGHDL backend was substituted; LLVM, SKY130, desktop launcher creation, GUI operation and circuit simulation were not verified.

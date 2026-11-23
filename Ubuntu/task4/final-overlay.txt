@@ -1,0 +1,35 @@
+Installer exit: 1
+Detected Ubuntu Version: 25.04
+Running script: /home/ubuntu/eSim-2.5/install-eSim-scripts/install-eSim-25.04.sh --install
+Installing KiCad...........................
+KiCad installation completed successfully!
+symbol table copied in the directory
+Installing NGHDL...........................
+Detected Ubuntu Version: 
+Unsupported Ubuntu version: 25.04 ()
+=== final lines ===
+  inflating: nghdl/src/ngspice_ghdl.py  
+   creating: nghdl/src/ghdlserver/
+  inflating: nghdl/src/ghdlserver/compile.sh  
+  inflating: nghdl/src/ghdlserver/ghdlserver.c  
+  inflating: nghdl/src/ghdlserver/ghdlserver.h  
+  inflating: nghdl/src/ghdlserver/uthash.h  
+  inflating: nghdl/src/ghdlserver/Utility_Package.vhdl  
+  inflating: nghdl/src/ghdlserver/Vhpi_Package.vhdl  
+Detected Ubuntu Version: 
+Unsupported Ubuntu version: 25.04 ()
+=== artifacts ===
+kicad 8.0.8+dfsg-1 install ok installed
+/usr/bin/kicad-cli
+8.0.8
+-rw-r--r-- 1 ubuntu ubuntu 37320 Nov 23 17:27 /home/ubuntu/.config/kicad/6.0/sym-lib-table
+-rw-r--r-- 1 ubuntu ubuntu 21596 Nov 23 17:27 /usr/share/kicad/symbols/eSim_Analog.kicad_sym
+=== configured sources ===
+ubuntu.sources
+Python 3.13.3; Qt 5.15.15; matplotlib 3.8.3; psutil 5.9.8
+/usr/lib/python3/dist-packages/PyQt5/QtCore.abi3.so
+/usr/lib/python3/dist-packages/matplotlib/__init__.py
+/usr/lib/python3/dist-packages/psutil/__init__.py
+runtime_probe_exit=0
+Application
+app_import_exit=0
