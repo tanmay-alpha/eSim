@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import Application; print(Application.Application.__name__)
+    ^^^^^^^^^^^^^^^^^^
+  File "/tmp/task4-release/eSim-2.5/src/frontEnd/Application.py", line 38, in <module>
+    from frontEnd import DockArea
+  File "/tmp/task4-release/eSim-2.5/src/frontEnd/DockArea.py", line 7, in <module>
+    from maker.makerchip import makerchip
+  File "/tmp/task4-release/eSim-2.5/src/maker/makerchip.py", line 31, in <module>
+    from . import Maker
+  File "/tmp/task4-release/eSim-2.5/src/maker/Maker.py", line 30, in <module>
+    import hdlparse.verilog_parser as vlog
+ModuleNotFoundError: No module named 'hdlparse'
+Cannot access Modelica map file --- .esim folder
+No section: 'eSim'
+import_exit=1

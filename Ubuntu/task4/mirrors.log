@@ -1,0 +1,12 @@
+=== default source update (excerpt) ===
+Get:16 http://archive.ubuntu.com/ubuntu plucky-updates/multiverse amd64 Packages [31.6 kB]
+Get:17 http://archive.ubuntu.com/ubuntu plucky-backports/universe amd64 Packages [4040 B]
+Fetched 25.2 MB in 15s (1738 kB/s)
+Reading package lists...
+=== old-releases update (excerpt) ===
+  404  Not Found [IP: 185.125.189.137 80]
+Reading package lists...
+E: The repository 'http://old-releases.ubuntu.com/ubuntu plucky Release' does not have a Release file.
+E: The repository 'http://old-releases.ubuntu.com/ubuntu plucky-updates Release' does not have a Release file.
+E: The repository 'http://old-releases.ubuntu.com/ubuntu plucky-backports Release' does not have a Release file.
+E: The repository 'http://old-releases.ubuntu.com/ubuntu plucky-security Release' does not have a Release file.

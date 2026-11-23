@@ -1,0 +1,7 @@
+ae5edd12af4e43c3683bc7f9508526e40b2484e7366d64bbac9739968e311680  install-nghdl.sh
+install-nghdl-22.04.sh
+install-nghdl-23.04.sh
+install-nghdl-24.04.sh
+Detected Ubuntu Version: 
+Unsupported Ubuntu version: 25.04 ()
+nghdl_exit=1

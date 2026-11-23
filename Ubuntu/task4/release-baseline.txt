@@ -1,0 +1,43 @@
+Official eSim 2.5 release vs. FOSSEE installers branch — Ubuntu 25.04
+
+Environment: separate linux/amd64 Docker container, image ubuntu:25.04
+(ubuntu@sha256:27771fb7b40a58237c98e8d3e6b9ecdd9289cec69a857fccfb85ff36294dac20).
+/etc/os-release: VERSION_ID="25.04", VERSION_CODENAME=plucky.
+lsb_release -ds: Ubuntu 25.04. Release installer run as ubuntu (UID 1000).
+Container setup only: apt-get update on the image's default Ubuntu mirrors;
+installed unzip, sudo, lsb-release and ca-certificates; enabled passwordless sudo
+for the test user. No spoofed release metadata or host package installations.
+
+Official release: https://static.fossee.in/esim/installation-files/eSim-2.5.zip
+Download size: 100868880 bytes. SHA-256 checked again inside the container:
+$ sha256sum /tmp/eSim-2.5.zip
+b9860ae26f026930bae589520761f4a57b85d593a2e2cd1ac83d5e5db2f281ed  /tmp/eSim-2.5.zip
+
+Release baseline (full ZIP; followed the bundled INSTALL; no installer edits):
+$ cd /home/ubuntu/release && unzip -q /tmp/eSim-2.5.zip && cd eSim-2.5
+$ cat VERSION
+2.5
+$ chmod +x install-eSim.sh
+$ printf 'n\ny\n' | ./install-eSim.sh --install
+Detected Ubuntu Version: 
+Unsupported Ubuntu version: 25.04 ()
+Exit: 1. No backend selected and no dependency installation started.
+
+The archive dispatcher (SHA-256 b1689d6b3a29996079ad605dc82164cdc57be879991e587860117a6058973dba)
+has cases for 22.04, 23.04 and 24.04 only. The archive's install-eSim-scripts/
+contains only the corresponding three scripts. Its FULL_VERSION regex requires
+three numeric components, but lsb_release reports 25.04, hence the empty ().
+
+Upstream source baseline (FOSSEE/eSim installers, a77d6b904c7bab275d819cf4d8cbb594802fe16d):
+Exported Ubuntu/install-eSim.sh and Ubuntu/install-eSim-scripts/ from the Git
+object with git show <commit>:<path>, not from the modified worktree. On the
+same OS, using the upstream dispatcher bytes (SHA-256 d1172696174ca3c7b38a9842fbd278070a41c86a02770d1828c8ed5692f28029):
+$ cd /tmp/task4-source/Ubuntu && bash ./install-eSim.sh --install
+./install-eSim.sh: line 70: syntax error near unexpected token `}'
+./install-eSim.sh: line 70: `}'
+Exit: 2. Unlike the ZIP, source has a 25.04 case and install-eSim-25.04.sh,
+but its dispatcher fails to parse before it can invoke any backend.
+
+The two failures are distinct. Updating only the release dispatcher without
+supplying the missing version backend is not a complete release overlay.
+See release-overlay.txt for the attempt using both parts.

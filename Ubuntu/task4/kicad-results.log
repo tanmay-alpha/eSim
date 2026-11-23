@@ -1,0 +1,34 @@
+Scope: package-selection commands only, not the complete eSim installer or GUI.
+Container: ubuntu:25.04@sha256:27771fb7b40a58237c98e8d3e6b9ecdd9289cec69a857fccfb85ff36294dac20, linux/amd64, Ubuntu 25.04 (plucky). Host ran Docker, not apt.
+Source examined: a77d6b904c7bab275d819cf4d8cbb594802fe16d, Ubuntu/install-eSim-scripts/install-eSim-25.04.sh, installKicad.
+
+APT sources in this run: http://archive.ubuntu.com/ubuntu/ (plucky, plucky-updates, plucky-security, plucky-backports; main universe restricted multiverse), plus http://ppa.launchpadcontent.net/kicad/kicad-8.0-releases/ubuntu plucky main. The archive/security URIs were both set to archive.ubuntu.com after old-releases.ubuntu.com returned HTTP 404 (apt update exit 100). PPA key from keyserver.ubuntu.com, fingerprint FDA854F61C4D0D9572BB95E5245D5502FAD7A805 from Launchpad API, scoped via signed-by=/usr/share/keyrings/kicad.asc. No unsigned repositories.
+$ apt-get -o APT::Update::Error-Mode=any update
+Get:3 http://ppa.launchpadcontent.net/kicad/kicad-8.0-releases/ubuntu plucky InRelease [24.1 kB]
+Get:6 http://ppa.launchpadcontent.net/kicad/kicad-8.0-releases/ubuntu plucky/main amd64 Packages [4309 B]
+exit: 0
+
+Before installation: apt-cache policy kicad showed Installed: (none); PPA candidate 8.0.9-0~ubuntu25.04.1, Plucky universe 8.0.8+dfsg-1. All four requested library packages also showed Installed: (none).
+$ apt-get install -y --no-install-recommends kicad=8.0.8+dfsg-1 kicad-footprints kicad-libraries kicad-symbols kicad-templates
+0 upgraded, 202 newly installed, 0 to remove and 9 not upgraded.
+Fetched 206 MB in 5min 45s (596 kB/s)
+Setting up kicad (8.0.8+dfsg-1) ...
+exit: 0
+
+Negative control: remove ONLY the version constraint from the command, keeping the same indexes. This was an actual apt-get install invocation, not a simulated failure. The failed upgrade did not change the installed packages.
+$ apt-get install -y --no-install-recommends kicad kicad-footprints kicad-libraries kicad-symbols kicad-templates
+ kicad : Depends: libgit2-1.8 (>= 1.8.0) but it is not installable
+   1. kicad:amd64=8.0.9-0~ubuntu25.04.1 is selected as an upgrade
+exit: 100
+$ dpkg-query -W kicad kicad-footprints kicad-libraries kicad-symbols kicad-templates libgit2-1.9
+kicad	8.0.8+dfsg-1
+kicad-footprints	8.0.9~ubuntu25.04.1
+kicad-libraries	8.0.9~ubuntu25.04.1
+kicad-symbols	8.0.9~ubuntu25.04.1
+kicad-templates	8.0.9~ubuntu25.04.1
+libgit2-1.9:amd64	1.9.0+ds-1ubuntu1
+$ kicad-cli version
+8.0.8
+exit: 0
+
+Conclusion: the previously reported libgit2 failure reproduces with the unpinned PPA binary, NOT with the checked-in installer command. No package selection change warranted. To repeat on fresh Plucky with the sources above, run bash Ubuntu/task4/kicad-check.sh as root.

@@ -3,6 +3,8 @@ eSim Packaging
 
 It contains all the documentation for packaging eSim for distribution.
 
+**Ubuntu 25.04 / eSim 2.5 (Task 4):** [Investigation and reproduction steps](Ubuntu/task4/FOSSEE_Task4_eSim_Upgradation_Report.md) · [PDF report](Ubuntu/task4/FOSSEE_Task4_eSim_Upgradation_Report.pdf). These are installer-step results, not a certification of the full GUI.
+
 
 # Packaging eSim for Distribution:
 

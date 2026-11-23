@@ -1,0 +1,139 @@
+Detected Ubuntu Version: 25.04
+Running script: /tmp/task4-final/eSim-2.5/install-eSim-scripts/install-eSim-25.04.sh --install
+Enter proxy details if you are connected to internet thorugh proxy
+Is your internet connection behind proxy? (y/n): Install without proxy
+Updating apt index files...................
+Hit:1 http://security.ubuntu.com/ubuntu plucky-security InRelease
+Hit:2 http://archive.ubuntu.com/ubuntu plucky InRelease
+Hit:3 http://archive.ubuntu.com/ubuntu plucky-updates InRelease
+Hit:4 http://archive.ubuntu.com/ubuntu plucky-backports InRelease
+Reading package lists...
+Installing virtualenv.......................
+Reading package lists...
+Building dependency tree...
+Reading state information...
+python3-virtualenv is already the newest version (20.29.1+ds-1).
+0 upgraded, 0 newly installed, 0 to remove and 8 not upgraded.
+created virtual environment CPython3.13.3.final.0-64 in 144ms
+  creator CPython3Posix(dest=/tmp/final-home/.esim/env, clear=False, no_vcs_ignore=False, global=True)
+  seeder FromAppData(download=False, pip=bundle, via=copy, app_data_dir=/tmp/final-home/.local/share/virtualenv)
+    added seed packages: pip==25.0
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+Starting the virtual env...................
+Upgrading Pip..............................
+Requirement already satisfied: pip in /tmp/final-home/.esim/env/lib/python3.13/site-packages (25.0)
+Collecting pip
+  Downloading pip-26.3-py3-none-any.whl.metadata (4.6 kB)
+Downloading pip-26.3-py3-none-any.whl (2.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 104.3 kB/s eta 0:00:00
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 25.0
+    Uninstalling pip-25.0:
+      Successfully uninstalled pip-25.0
+Successfully installed pip-26.3
+Installing Xterm...........................
+Reading package lists...
+Building dependency tree...
+Reading state information...
+xterm is already the newest version (397-1ubuntu1).
+0 upgraded, 0 newly installed, 0 to remove and 8 not upgraded.
+Installing Psutil..........................
+Reading package lists...
+Building dependency tree...
+Reading state information...
+python3-psutil is already the newest version (5.9.8-2build3).
+0 upgraded, 0 newly installed, 0 to remove and 8 not upgraded.
+Installing PyQt5...........................
+Reading package lists...
+Building dependency tree...
+Reading state information...
+python3-pyqt5 is already the newest version (5.15.11+dfsg-2).
+0 upgraded, 0 newly installed, 0 to remove and 8 not upgraded.
+Installing Matplotlib......................
+Reading package lists...
+Building dependency tree...
+Reading state information...
+python3-matplotlib is already the newest version (3.8.3-7build1).
+0 upgraded, 0 newly installed, 0 to remove and 8 not upgraded.
+Installing Setuptools...................
+Reading package lists...
+Building dependency tree...
+Reading state information...
+python3-setuptools is already the newest version (75.8.0-1ubuntu1).
+0 upgraded, 0 newly installed, 0 to remove and 8 not upgraded.
+Installing Pip3............................
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+python3-pip is already the newest version (25.0+dfsg-1ubuntu0.2).
+Summary:
+  Upgrading: 0, Installing: 0, Removing: 0, Not Upgrading: 8
+Installing Watchdog........................
+Collecting watchdog
+  Downloading watchdog-7.1.1-py3-none-manylinux_2_17_x86_64.whl.metadata (69 kB)
+Downloading watchdog-7.1.1-py3-none-manylinux_2_17_x86_64.whl (116 kB)
+Installing collected packages: watchdog
+Successfully installed watchdog-7.1.1
+Installing Hdlparse........................
+Collecting https://github.com/hdl/pyhdlparser/tarball/master
+  Downloading master (60 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: hdlparse
+  Building wheel for hdlparse (pyproject.toml): started
+  Building wheel for hdlparse (pyproject.toml): finished with status 'done'
+  Created wheel for hdlparse: filename=hdlparse-1.0.7-py3-none-any.whl size=12212 sha256=2c81cc60efe303d2367fadc101ac87169a5d57e08d3953828f533634a7547012
+  Stored in directory: /tmp/pip-ephem-wheel-cache-t3dn6tkr/wheels/24/dc/a4/fe236486ce8540abf55988c47ca176d1d70148c82d2b596f03
+Successfully built hdlparse
+Installing collected packages: hdlparse
+Successfully installed hdlparse-1.0.7
+Installing Makerchip.......................
+Collecting makerchip-app
+  Downloading makerchip_app-1.1.6-py3-none-any.whl.metadata (3.8 kB)
+Collecting click (from makerchip-app)
+  Downloading click-8.5.1-py3-none-any.whl.metadata (2.6 kB)
+Requirement already satisfied: requests in /usr/lib/python3/dist-packages (from makerchip-app) (2.32.3)
+Collecting sseclient-py (from makerchip-app)
+  Downloading sseclient_py-2.1.0-py3-none-any.whl.metadata (3.3 kB)
+Requirement already satisfied: chardet>=3.0.2 in /usr/lib/python3/dist-packages (from requests->makerchip-app) (5.2.0)
+Requirement already satisfied: idna<4,>=2.5 in /usr/lib/python3/dist-packages (from requests->makerchip-app) (3.10)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/lib/python3/dist-packages (from requests->makerchip-app) (2.3.0)
+Requirement already satisfied: certifi>=2017.4.17 in /usr/lib/python3/dist-packages (from requests->makerchip-app) (2025.1.31)
+Downloading makerchip_app-1.1.6-py3-none-any.whl (10 kB)
+Downloading click-8.5.1-py3-none-any.whl (126 kB)
+Downloading sseclient_py-2.1.0-py3-none-any.whl (9.1 kB)
+Installing collected packages: sseclient-py, click, makerchip-app
+
+Successfully installed click-8.5.1 makerchip-app-1.1.6 sseclient-py-2.1.0
+Installing SandPiper Saas..................
+Collecting sandpiper-saas
+  Downloading sandpiper_saas-1.1.1-py3-none-any.whl.metadata (1.8 kB)
+Requirement already satisfied: requests in /usr/lib/python3/dist-packages (from sandpiper-saas) (2.32.3)
+Requirement already satisfied: click in /tmp/final-home/.esim/env/lib/python3.13/site-packages (from sandpiper-saas) (8.5.1)
+Requirement already satisfied: chardet>=3.0.2 in /usr/lib/python3/dist-packages (from requests->sandpiper-saas) (5.2.0)
+Requirement already satisfied: idna<4,>=2.5 in /usr/lib/python3/dist-packages (from requests->sandpiper-saas) (3.10)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/lib/python3/dist-packages (from requests->sandpiper-saas) (2.3.0)
+Requirement already satisfied: certifi>=2017.4.17 in /usr/lib/python3/dist-packages (from requests->sandpiper-saas) (2025.1.31)
+Downloading sandpiper_saas-1.1.1-py3-none-any.whl (5.5 kB)
+Installing collected packages: sandpiper-saas
+Successfully installed sandpiper-saas-1.1.1
+Installing Hdlparse......................
+Requirement already satisfied: hdlparse in /tmp/final-home/.esim/env/lib/python3.13/site-packages (1.0.7)
+Installing KiCad...........................
+Ubuntu 25.04 detected.
+Adding KiCad PPA to local apt repository: kicad/kicad-8.0-releases
+sudo: add-apt-repository: command not found
+
+
+Error! Kindly resolve above error(s) and try again.
+
+Aborting Installation...
+
