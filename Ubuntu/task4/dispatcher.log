@@ -1,0 +1,31 @@
+GNU bash, version 5.2.37(1)-release (x86_64-pc-linux-gnu)
+Detected Ubuntu Version: 25.04
+Running script: /tmp/install-eSim-scripts/install-eSim-25.04.sh --install
+Enter proxy details if you are connected to internet thorugh proxy
+Is your internet connection behind proxy? (y/n): 
+
+Error! Kindly resolve above error(s) and try again.
+
+Aborting Installation...
+
+fixed_install_eof_exit=1
+/tmp/original.sh: line 70: syntax error near unexpected token `}'
+/tmp/original.sh: line 70: `}'
+original_install_eof_exit=2
+/tmp/original.sh: line 70: syntax error near unexpected token `}'
+/tmp/original.sh: line 70: `}'
+original_parse_exit=2
+fixed_parse_exit=0
+Detected Ubuntu Version: 25.04
+Running script: /tmp/install-eSim-scripts/install-eSim-25.04.sh --uninstall
+Are you sure? It will remove eSim completely including KiCad, Makerchip, NGHDL and SKY130 PDK along with their models and libraries (y/n):
+Detected Ubuntu Version: 25.04
+Running script: /tmp/install-eSim-scripts/install-eSim-25.04.sh --install
+Enter proxy details if you are connected to internet thorugh proxy
+Is your internet connection behind proxy? (y/n): 
+
+Error! Kindly resolve above error(s) and try again.
+
+Aborting Installation...
+
+regression_exit=0
